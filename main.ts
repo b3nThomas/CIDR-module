@@ -1,10 +1,3 @@
-import * as Bunyan from 'bunyan';
+import * as colors from 'colors';
 
-const log = Bunyan.createLogger({
-    name: 'my-app',
-    level: 'debug',
-    serializers: Bunyan.stdSerializers,
-    src: true
-});
-
-log.info('I am alive!');
+console.log(colors.green('I AM ALIIIIVE!'));
