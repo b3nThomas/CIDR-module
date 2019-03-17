@@ -4,10 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "build": "npm run -s transpile",
-    "start": "node main.js",
-    "start:local": "npm run -s build && node main.js",
-    "transpile": "npx tsc -p .",
+    "build": "npx tsc -p .",
+    "cidr": "npm run -s build && node main.js",
     "test": "npm run -s build && npx ava"
   },
   "repository": {

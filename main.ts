@@ -1,3 +1,3 @@
-import * as colors from 'colors';
+import { CIDR } from './src/CIDR';
 
-console.log(colors.green('I AM ALIIIIVE!'));
+new CIDR(process.env.CIDR);

@@ -13,7 +13,7 @@ export class CIDR {
         this.cidr = cidr;
         this.isValid = this.cidrIsValid();
         if (this.isValid) {
-            console.log(colors.green(`\n[+] Valid CIDR received: ${this.cidr}`));
+            console.log(colors.green(`\n[+] CIDR: ${this.cidr}`));
 
             this.subnetMask = this.calculateSubnetMask();
             console.log(colors.magenta(`[+] Subnet Mask: ${this.subnetMask}`));
@@ -24,8 +24,8 @@ export class CIDR {
             this.totalHosts = this.calculateTotalHosts();
             console.log(colors.cyan(`[+] Total Hosts: ${this.totalHosts}\n`));
         } else {
-            console.log(colors.red(`\n[-] CIDR invalid: ${this.cidr}`));
-            console.log(colors.red(`[-] Required format: [0-255].[0-255].[0-255].[0-255]/[0-32]\n`));
+            console.log(colors.bgRed(`\n[-] CIDR invalid: ${this.cidr}`));
+            console.log(colors.yellow(`[-] Required format: [0-255].[0-255].[0-255].[0-255]/[0-32]\n`));
         }
     }
 
