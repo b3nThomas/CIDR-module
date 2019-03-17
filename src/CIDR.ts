@@ -13,9 +13,19 @@ export class CIDR {
         this.cidr = cidr;
         this.isValid = this.cidrIsValid();
         if (this.isValid) {
+            console.log(colors.green(`\n[+] Valid CIDR received: ${this.cidr}`));
+
             this.subnetMask = this.calculateSubnetMask();
+            console.log(colors.magenta(`[+] Subnet Mask: ${this.subnetMask}`));
+
             this.wildcardHosts = this.calculateWildcardHosts();
+            console.log(colors.yellow(`[+] Wildcard Hosts: ${this.wildcardHosts}`));
+
             this.totalHosts = this.calculateTotalHosts();
+            console.log(colors.cyan(`[+] Total Hosts: ${this.totalHosts}\n`));
+        } else {
+            console.log(colors.red(`\n[-] CIDR invalid: ${this.cidr}`));
+            console.log(colors.red(`[-] Required format: [0-255].[0-255].[0-255].[0-255]/[0-32]\n`));
         }
     }
 
@@ -23,13 +33,7 @@ export class CIDR {
         const regex255 = '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])';
         const regex32 = '([0-9]|[1-2][0-9]|3[0-2])';
         const regexCIDR = new RegExp(`^(${regex255}\\.){3}${regex255}\\/${regex32}$`);
-        if (regexCIDR.test(this.cidr)) {
-            console.log(colors.green(`\n[+] Valid CIDR received: ${this.cidr}`));
-            return true;
-        }
-        console.log(colors.red(`\n[-] CIDR invalid: ${this.cidr}`));
-        console.log(colors.red(`[-] Required format: [0-255].[0-255].[0-255].[0-255]/[0-32]\n`));
-        return false;
+        return regexCIDR.test(this.cidr);
     }
 
     private calculateSubnetMask (): string {
@@ -54,9 +58,7 @@ export class CIDR {
                 subnetMask.push('0')
             }
         }
-        subnetMask = subnetMask.join('.');
-        console.log(colors.magenta(`[+] Subnet Mask: ${subnetMask}`));
-        return subnetMask;
+        return subnetMask.join('.');
     }
 
     private calculateWildcardHosts(): string {
@@ -65,18 +67,14 @@ export class CIDR {
         subnetSplit.forEach(val => {
             wildcardHosts.push(255 - parseInt(val));
         });
-        wildcardHosts = wildcardHosts.join('.');
-        console.log(colors.yellow(`[+] Wildcard Hosts: ${wildcardHosts}`));
-        return wildcardHosts;
+        return wildcardHosts.join('.');
     }
     
     private calculateTotalHosts(): number {
         const wildcardSplit = this.wildcardHosts.split('.');
         const reduced = wildcardSplit.map(val => parseInt(val) + 1);
         const reducer = (accumulator, val) => accumulator * val;
-        const totalHosts = reduced.reduceRight(reducer);
-        console.log(colors.cyan(`[+] Total Hosts: ${totalHosts}\n`));
-        return totalHosts;
+        return reduced.reduceRight(reducer);
     }
 }
 
