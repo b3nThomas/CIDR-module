@@ -77,11 +77,3 @@ export class CIDR {
         return reduced.reduceRight(reducer);
     }
 }
-
-// All subsequent functions assume that the CIDR IP is using the valid format...
-
-
-// Check CIDR is valid.
-// Calculate subnet mask.
-// Calculate wildcard bits.
-// Calculate IP addresses.
