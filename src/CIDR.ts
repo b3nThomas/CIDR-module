@@ -1,17 +1,21 @@
 import * as colors from 'colors';
 
-// Classless Inter-Domain Routing
+// "Classless Inter-Domain Routing" module
 
 export class CIDR {
     public readonly cidr: string;
     public readonly isValid: boolean;
-    public readonly subnetMask: string = 'Unavailable';
+    public readonly subnetMask: string = null;
+    public readonly wildcardHosts: string = null;
+    public readonly totalHosts: number = null;
 
     constructor (cidr: string) {
         this.cidr = cidr;
         this.isValid = this.cidrIsValid();
         if (this.isValid) {
             this.subnetMask = this.calculateSubnetMask();
+            this.wildcardHosts = this.calculateWildcardHosts();
+            this.totalHosts = this.calculateTotalHosts();
         }
     }
 
@@ -46,13 +50,33 @@ export class CIDR {
             subnetMask.push(parseInt(bits.join(''), 2).toString());
         }
         if (subnetMask.length !== 4) {
-            for (let i = 0; i < (5 - subnetMask.length); i++) {
+            for (let i = 0; i <= (4 - subnetMask.length); i++) {
                 subnetMask.push('0')
             }
         }
         subnetMask = subnetMask.join('.');
-        console.log(colors.green(`[+] Subnet Mask calculated: ${subnetMask}\n`));
+        console.log(colors.magenta(`[+] Subnet Mask: ${subnetMask}`));
         return subnetMask;
+    }
+
+    private calculateWildcardHosts(): string {
+        let wildcardHosts: any = [];
+        const subnetSplit = this.subnetMask.split('.');
+        subnetSplit.forEach(val => {
+            wildcardHosts.push(255 - parseInt(val));
+        });
+        wildcardHosts = wildcardHosts.join('.');
+        console.log(colors.yellow(`[+] Wildcard Hosts: ${wildcardHosts}`));
+        return wildcardHosts;
+    }
+    
+    private calculateTotalHosts(): number {
+        const wildcardSplit = this.wildcardHosts.split('.');
+        const reduced = wildcardSplit.map(val => parseInt(val) + 1);
+        const reducer = (accumulator, val) => accumulator * val;
+        const totalHosts = reduced.reduceRight(reducer);
+        console.log(colors.cyan(`[+] Total Hosts: ${totalHosts}\n`));
+        return totalHosts;
     }
 }
 
